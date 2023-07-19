@@ -29,43 +29,49 @@ class Field {
 
   }
   check(x,y){
-    if(this._field[y][x] === hole && x  ){
+    if(this._field[y][x] === hole && x ){
       return true;
     } else {
       return false;
     }
   }
   checkForHole(x,y){
-    if(this._field[y][x] === hole){
-        console.log('You fell down a hole try again!')
-        this.start();
-    } 
+    return this._field[y][x] === hole ? true : false;
   }
-  checkForBoundry(x,y){
-    if(y < 0 || y > this._field.length-1){ //need to change for when generative map
-        console.log('You hit the boundry try again!');
-        this.start()
-    } else if (x < 0 || x > this._field[0].length-1){ //need to change for when generative map
-        console.log('You hit the boundry try again!');
-        this.start()
-    }
+  checkForBoundryX(x){
+   return  x < 0 || x > this._field[0].length-1 ? true : false;
+  }
+  checkForBoundryY(y){
+    return y < 0 || y > this._field.length-1 ? true : false;
   }
   checkForPath(x,y){
-    if(this._field[y][x] === '*'){
-        this._field[this.position.y][this.position.x] = '░';
-    }
+    return this._field[y][x] === pathCharacter ? true : false;
   }
   checkForHat(x,y){
-    if(this._field[y][x] === hat){
-        console.log('You found your hat good job!')
-        this.counter=true;
-    } 
+    return this._field[y][x] === hat ? true : false;
   }
   checkSuper(x,y){
-    this.checkForBoundry(x,y);
-    this.checkForHole(x,y);
-    this.checkForPath(x,y);
-    this.checkForHat(x,y)
+    console.log(x)
+    console.log(y)
+    if(this.checkForBoundryX(x)){
+      console.log('You hit the boundry try again!');
+      this.start()
+    } 
+    if(this.checkForBoundryY(y)){
+      console.log('You hit the boundry try again!');
+      this.start()
+    }
+    if(this.checkForHole(x,y)){
+      console.log('You fell down a hole try again!');
+      this.start()
+    }
+    if(this.checkForPath(x,y)){
+      this._field[this.position.y][this.position.x] = '░';
+    }
+    if(this.checkForHat(x,y)){
+      console.log('You found your hat good job!')
+      this.counter=true;
+    }
   }
   right(){
     let newPosition = {x:this.position.x,y:this.position.y};
