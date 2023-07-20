@@ -20,20 +20,26 @@ class Field {
   }
   mazeSolver(){
     this.reset();
-    i = false;
-    while(i != true){
-      check
-      this.down()
+    // i = false;
+    let j = 0;
+    while (j < 15){
+      console.log("--------");
+      this.printField();
+      let newPosition = {x:this.position.x,y:this.position.y}
+      j++
+      if(this.botCheck(newPosition.x,newPosition.y+1)) {
+        this.down();
+      } else if(this.botCheck(newPosition.x-1,newPosition.y)){
+        this.left();
+      } else if(this.botCheck(newPosition.x+1,newPosition.y)){
+        this.right();
+      } else if(this.botCheck(newPosition.x,newPosition.y-1)){
+        this.up();
+      }
+        
     } 
   
 
-  }
-  check(x,y){
-    if(this._field[y][x] === hole && x ){
-      return true;
-    } else {
-      return false;
-    }
   }
   checkForHole(x,y){
     return this._field[y][x] === hole ? true : false;
@@ -50,23 +56,24 @@ class Field {
   checkForHat(x,y){
     return this._field[y][x] === hat ? true : false;
   }
+  botCheck(x,y){
+    return !this.checkForBoundryX(x)&&!this.checkForBoundryY(y)&&!this.checkForHole(x,y)&&!this.checkForPath(x,y)? true : false;
+  }
   checkSuper(x,y){
-    console.log(x)
-    console.log(y)
     if(this.checkForBoundryX(x)){
       console.log('You hit the boundry try again!');
-      this.start()
+      this.start();
     } 
     if(this.checkForBoundryY(y)){
       console.log('You hit the boundry try again!');
-      this.start()
+      this.start();
     }
     if(this.checkForHole(x,y)){
       console.log('You fell down a hole try again!');
       this.start()
     }
     if(this.checkForPath(x,y)){
-      this._field[this.position.y][this.position.x] = '░';
+      this._field[this.position.y][this.position.x] = fieldCharacter;
     }
     if(this.checkForHat(x,y)){
       console.log('You found your hat good job!')
@@ -78,7 +85,7 @@ class Field {
     newPosition.x++
     this.checkSuper(newPosition.x,newPosition.y);
     this.position.x++
-    this._field[this.position.y][this.position.x] = '*';
+    this._field[this.position.y][this.position.x] = pathCharacter;
 
   }
   left(){
@@ -86,7 +93,7 @@ class Field {
     newPosition.x--
     this.checkSuper(newPosition.x,newPosition.y);
     this.position.x--
-    this._field[this.position.y][this.position.x] = '*';
+    this._field[this.position.y][this.position.x] = pathCharacter;
 
   }
   down(){
@@ -94,14 +101,14 @@ class Field {
     newPosition.y++
     this.checkSuper(newPosition.x,newPosition.y);
     this.position.y++
-    this._field[this.position.y][this.position.x] = '*';
+    this._field[this.position.y][this.position.x] = pathCharacter;
   }
   up(){
     let newPosition = {x:this.position.x,y:this.position.y};
     newPosition.y--
     this.checkSuper(newPosition.x,newPosition.y);
     this.position.y--
-    this._field[this.position.y][this.position.x] = '*';
+    this._field[this.position.y][this.position.x] = pathCharacter;
   }
   reset(){
     this._field = this._originalField.map(row => [...row]);
@@ -193,7 +200,9 @@ class GenerateField{
   }
 }
 
-const generatedField = new GenerateField(10,10,50);
+
+
+const generatedField = new GenerateField(10,10,30);
 const newField = new Field(generatedField.generate());
 
 newField.start();
