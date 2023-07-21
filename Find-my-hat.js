@@ -11,35 +11,11 @@ const pathCharacter = '*';
 
 class Field {
   constructor(field){
-    this._originalField = field;
     this._field = field;
     this.position = {
         x:0, y:0
     }
     this.counter = false;
-  }
-  mazeSolver(){
-    this.reset();
-    // i = false;
-    let j = 0;
-    while (j < 15){
-      console.log("--------");
-      this.printField();
-      let newPosition = {x:this.position.x,y:this.position.y}
-      j++
-      if(this.botCheck(newPosition.x,newPosition.y+1)) {
-        this.down();
-      } else if(this.botCheck(newPosition.x-1,newPosition.y)){
-        this.left();
-      } else if(this.botCheck(newPosition.x+1,newPosition.y)){
-        this.right();
-      } else if(this.botCheck(newPosition.x,newPosition.y-1)){
-        this.up();
-      }
-        
-    } 
-  
-
   }
   checkForHole(x,y){
     return this._field[y][x] === hole ? true : false;
@@ -111,7 +87,8 @@ class Field {
     this._field[this.position.y][this.position.x] = pathCharacter;
   }
   reset(){
-    this._field = this._originalField.map(row => [...row]);
+    let originalField = this._field.map(row => [...row]);
+    this._field = originalField;
     this.position.x = parseFloat(this._field[0].findIndex(elm => elm === pathCharacter));
     this.position.y = 0;
   }
@@ -192,11 +169,46 @@ class GenerateField{
     this._field[this._height-1][Math.floor(Math.random()*this._width)] = hat;
   }
   generate(){
+      this._field = [];
       this.emptyField();
       this.holes();
       this.placePath();
       this.placeHat();
-      return this._field;
+      let originalField = this._field.map(row => [...row]);
+      if(this.fillFuncTwo() === true){
+        this._field = originalField;
+        return this._field;
+      } 
+      this.generate()
+  
+  }
+  fillFuncTwo(){
+    const y = 0;
+    const x = parseFloat(this._field[0].findIndex(elm => elm === pathCharacter));
+    this._field[0][x] = fieldCharacter;
+    return this.fillFunc(x,y) ? true : false;
+  }
+  
+  fillFunc(x, y) {
+    if (
+      x < 0 || 
+      x > this._field[0].length - 1 || 
+      y < 0 || 
+      y > this._field.length - 1 ||  
+      this._field[y][x] === hole ||
+      this._field[y][x] === pathCharacter
+    ) {
+      return false;
+    }
+    if (this._field[y][x] === hat) {
+      return true;
+    }
+    this._field[y][x] = pathCharacter;
+    if (this.fillFunc(x, y + 1)) return true; 
+    if (this.fillFunc(x + 1, y)) return true;
+    if (this.fillFunc(x, y - 1)) return true;
+    if (this.fillFunc(x - 1, y)) return true;
+    return false;
   }
 }
 
@@ -205,5 +217,6 @@ class GenerateField{
 const generatedField = new GenerateField(10,10,30);
 const newField = new Field(generatedField.generate());
 
-newField.start();
+
 // generatedField.emptyField();
+newField.start();
