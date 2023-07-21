@@ -22,3 +22,6 @@ const generatedField = new GenerateField(20,20,80); // (width, height, percentag
 const newField = new Field(generatedField.generate());
 newField.start()
 `
+## Blog
+[
+](https://medium.com/@davies.matt.02/project-2-find-my-hat-10a9f45a3332)https://medium.com/@davies.matt.02/project-2-find-my-hat-10a9f45a3332Check out my blog for the mistakes and learnings this took awhile 
