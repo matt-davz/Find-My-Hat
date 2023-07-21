@@ -6,7 +6,7 @@ prompt-sync: https://github.com/heapwolf/prompt-sync;
 
 siginit is set to true so to exit out of the program press control+c
 
-##Controls/Inputs
+##Controls & Inputs
 
 "r" - go right
 "l" - go left
