@@ -1,6 +1,6 @@
 # Find-My-Hat
 
-# Needed
+## Needed
 Need prompt-sync package in order to work.
 prompt-sync: https://github.com/heapwolf/prompt-sync;
 
