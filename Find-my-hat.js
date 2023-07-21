@@ -12,10 +12,11 @@ const pathCharacter = '*';
 class Field {
   constructor(field){
     this._field = field;
+    this._originalField = this._field.map(row => [...row]);
     this.position = {
-        x:0, y:0
+        x:this._field[0].findIndex(elm => elm === pathCharacter), y:0
     }
-    this.counter = false;
+    this.hatPosition = {x:this._field[field.length - 1].findIndex(elm => elm === hat),y: this._field.length-1}
   }
   checkForHole(x,y){
     return this._field[y][x] === hole ? true : false;
@@ -32,28 +33,24 @@ class Field {
   checkForHat(x,y){
     return this._field[y][x] === hat ? true : false;
   }
-  botCheck(x,y){
-    return !this.checkForBoundryX(x)&&!this.checkForBoundryY(y)&&!this.checkForHole(x,y)&&!this.checkForPath(x,y)? true : false;
-  }
   checkSuper(x,y){
     if(this.checkForBoundryX(x)){
       console.log('You hit the boundry try again!');
+      this.reset();
       this.start();
     } 
     if(this.checkForBoundryY(y)){
       console.log('You hit the boundry try again!');
+      this.reset();
       this.start();
     }
     if(this.checkForHole(x,y)){
       console.log('You fell down a hole try again!');
+      this.reset();
       this.start()
     }
     if(this.checkForPath(x,y)){
       this._field[this.position.y][this.position.x] = fieldCharacter;
-    }
-    if(this.checkForHat(x,y)){
-      console.log('You found your hat good job!')
-      this.counter=true;
     }
   }
   right(){
@@ -87,36 +84,32 @@ class Field {
     this._field[this.position.y][this.position.x] = pathCharacter;
   }
   reset(){
-    let originalField = this._field.map(row => [...row]);
-    this._field = originalField;
+    this._field = this._originalField.map(row => [...row]);
     this.position.x = parseFloat(this._field[0].findIndex(elm => elm === pathCharacter));
     this.position.y = 0;
   }
   start(){
-    this.reset();
-    for(let i = 0; i < 1;){
-        if(!this.counter){
-            this.printField();
-            let direction = prompt('which direction?');
-            switch(direction){
-                case 'r':
-                    this.right();
-                    break;
-                case 'l':
-                    this.left();
-                    break;
-                case 'd':
-                    this.down();
-                    break;
-                case 'u':
-                    this.up();
-                    break;    
-            }   
-        } else {
-            i = 1;
-        }
-        
-    }
+    this.printField();
+    let direction = prompt('which direction?');
+    switch(direction){
+      case 'r':
+        this.right();
+        break;
+      case 'l':
+        this.left();
+        break;
+      case 'd':
+        this.down();
+        break;
+      case 'u':
+        this.up();
+        break;    
+            }
+     if (this.position.x === this.hatPosition.x && this.position.y === this.hatPosition.y) {
+      console.log('You found your hat! Good job!');
+      return;
+    }       
+    return this.start()  
   }
   printField(){
     this._field.forEach(element => {
@@ -168,19 +161,18 @@ class GenerateField{
   placeHat(){
     this._field[this._height-1][Math.floor(Math.random()*this._width)] = hat;
   }
-  generate(){
-      this._field = [];
-      this.emptyField();
-      this.holes();
-      this.placePath();
-      this.placeHat();
-      let originalField = this._field.map(row => [...row]);
-      if(this.fillFuncTwo() === true){
-        this._field = originalField;
-        return this._field;
-      } 
-      this.generate()
-  
+  generate() {
+    this._field = [];
+    this.emptyField();
+    this.holes();
+    this.placePath();
+    this.placeHat();
+    let originalField = this._field.map(row => row.slice());
+    if (this.fillFuncTwo()) {
+      this._field = originalField;
+      return this._field;
+    }
+    return this.generate();
   }
   fillFuncTwo(){
     const y = 0;
@@ -214,9 +206,8 @@ class GenerateField{
 
 
 
-const generatedField = new GenerateField(10,10,30);
+const generatedField = new GenerateField(20,20,80); // (width, height, percentage of holes)
 const newField = new Field(generatedField.generate());
+newField.start()
 
 
-// generatedField.emptyField();
-newField.start();

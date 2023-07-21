@@ -64,3 +64,31 @@ const testField = new GenerateField(10,10,15);
     console.log(testField.generate());
 
 export {GenerateField}
+
+
+start(){
+    this.reset();
+    for(let i = 0; i < 1;){
+        if(!this.counter){
+            this.printField();
+            let direction = prompt('which direction?');
+            switch(direction){
+                case 'r':
+                    this.right();
+                    break;
+                case 'l':
+                    this.left();
+                    break;
+                case 'd':
+                    this.down();
+                    break;
+                case 'u':
+                    this.up();
+                    break;    
+            }   
+        } else {
+            i = 1;
+        }
+        
+    }
+  }
