@@ -1,11 +1,5 @@
 # Find-My-Hat
 
-## Needed
-Need prompt-sync package in order to work.
-prompt-sync: https://github.com/heapwolf/prompt-sync;
-
-siginit is set to true so to exit out of the program press control+c
-
 ## Controls & Inputs
 
 "r" - go right
