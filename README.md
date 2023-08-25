@@ -18,4 +18,5 @@ newField.start()
 `
 ## Blog
 [
-](https://medium.com/@davies.matt.02/project-2-find-my-hat-10a9f45a3332)https://medium.com/@davies.matt.02/project-2-find-my-hat-10a9f45a3332Check out my blog for the mistakes and learnings this took awhile 
+](https://medium.com/@davies.matt.02/project-2-find-my-hat-10a9f45a3332)https://medium.com/@davies.matt.02/project-2-find-my-hat-10a9f45a3332
+Check out my blog for the mistakes and learnings this took awhile 
